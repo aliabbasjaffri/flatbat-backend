@@ -5,7 +5,7 @@
 - This project is compatible with node `v12.4.0` and npm `6.9.0`.
 - This project uses mongodb instance as database.
 - For ease of setup, please launch mongodb instance via docker-compose.
-- This project is compatible with docker version 18.09.2 and docker-compose version 1.23.2.
+- This project is compatible with docker `v18.09.2` and docker-compose `v1.23.2`.
 
 ## Installation
 
