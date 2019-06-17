@@ -10,7 +10,9 @@ import bodyParser from "body-parser";
 import bluebird from "bluebird";
 import helmet from "helmet";
 import errorHandler from "errorhandler";
-import { MONGO_URI, SESSION } from "./utils/secrets";
+import { allowCrossDomain, checkAuthentication  } from "./middleware";
+import { login, register, currentUser, logout } from "./controllers/auth";
+import { MONGO_URI, SESSION, PORT } from "./utils/secrets";
 
 dotenv.config({ path: ".env"});
 
@@ -27,11 +29,12 @@ mongoose.connect(mongoURL, { useNewUrlParser: true }).then(() => {
 const app = express();
 
 // Setting express variables
-app.set("port", process.env.PORT || 3000);
+app.set("port", PORT || 3000);
 app.use(errorHandler());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(helmet());
+app.use(allowCrossDomain);
 app.use(session({
 	resave: true,
 	saveUninitialized: true,
@@ -42,8 +45,10 @@ app.use(session({
 	})
 }));
 
-app.get("/", (req, res) => {
-	res.json("You are the one!");
-});
+app.get("/", (req, res) => { res.json("You are the one!"); });
+app.post("/login", login);
+app.post("/register", register);
+app.get("/currentuser", checkAuthentication, currentUser);
+app.post("/logout", checkAuthentication, logout);
 
 export default app;
